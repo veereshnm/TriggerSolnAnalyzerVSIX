@@ -205,7 +205,9 @@ namespace CallGraphExtension
         private object GetService(Type serviceType)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            return _package.GetService(serviceType);
+            // Use IServiceProvider directly to avoid generic type inference issue
+            var serviceProvider = _package as IServiceProvider;
+            return serviceProvider?.GetService(serviceType);
         }
     }
 }
