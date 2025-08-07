@@ -37,8 +37,8 @@ namespace CallGraphExtension
         public static async Task InitializeAsync(AsyncPackage package)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
-            var commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
-            new CallGraphCommand(package, commandService);
+            var commandService = await package.GetServiceAsync<IMenuCommandService, IMenuCommandService>();
+            new CallGraphCommand(package, commandService as OleMenuCommandService);
         }
 
         private void BeforeQueryStatus(object sender, EventArgs e)
@@ -87,7 +87,7 @@ namespace CallGraphExtension
 
             try
             {
-                var dte = await _package.GetServiceAsync(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
+                var dte = await _package.GetServiceAsync<EnvDTE.DTE, EnvDTE.DTE>();
                 if (dte == null || dte.ActiveDocument == null)
                 {
                     await ShowMessageAsync("Error", "No active C# document found.");
@@ -170,7 +170,7 @@ namespace CallGraphExtension
 
                     var ngServeInfo = new ProcessStartInfo
                     {
-                        FileName= "cmd.exe",
+                        FileName = "cmd.exe",
                         Arguments = "/C cd /d C:\\Projects\\call-graph-app && ng serve",
                         UseShellExecute = true,
                         CreateNoWindow = false
