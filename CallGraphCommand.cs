@@ -68,9 +68,18 @@ namespace CallGraphExtension
                 if (document == null) return;
 
                 var syntaxRoot = document.GetSyntaxRootAsync().Result;
-                var node = syntaxRoot.FindNode(new Microsoft.CodeAnalysis.Text.TextSpan(position, 0));
+                var node = syntaxRoot.FindNode(new Microsoft.CodeAnalysis.Text.TextSpan(position, 0), findInsideTrivia: true);
+                
+                // Check if the node is part of a method declaration or its identifier
                 var methodDecl = node.FirstAncestorOrSelf<MethodDeclarationSyntax>();
-                menuCommand.Enabled = methodDecl != null;
+                if (methodDecl == null) return;
+
+                // Ensure the cursor is on the method name or within the method header
+                var identifier = methodDecl.Identifier;
+                var methodSpan = methodDecl.Span;
+                if (position < methodSpan.Start || position > methodSpan.End) return;
+
+                menuCommand.Enabled = true;
             }
         }
 
@@ -110,7 +119,7 @@ namespace CallGraphExtension
                     }
 
                     var syntaxRoot = await document.GetSyntaxRootAsync();
-                    var node = syntaxRoot.FindNode(new Microsoft.CodeAnalysis.Text.TextSpan(position, 0));
+                    var node = syntaxRoot.FindNode(new Microsoft.CodeAnalysis.Text.TextSpan(position, 0), findInsideTrivia: true);
                     var methodDecl = node.FirstAncestorOrSelf<MethodDeclarationSyntax>();
                     if (methodDecl == null)
                     {
@@ -205,7 +214,6 @@ namespace CallGraphExtension
         private object GetService(Type serviceType)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            // Use IServiceProvider directly to avoid generic type inference issue
             var serviceProvider = _package as IServiceProvider;
             return serviceProvider?.GetService(serviceType);
         }
