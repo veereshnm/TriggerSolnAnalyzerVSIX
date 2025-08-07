@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <Extern href="stdidcmd.h"/>
+  <Extern href="vsshlids.h"/>
+  <Commands package="CallGraphExtensionPackage">
+    <Groups>
+      <Group guid="guidCallGraphCommandPackageCmdSet" id="MyMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
+      </Group>
+    </Groups>
+    <Buttons>
+      <Button guid="guidCallGraphCommandPackageCmdSet" id="CallGraphCommandId" priority="0x0100" type="Button">
+        <Parent guid="guidCallGraphCommandPackageCmdSet" id="MyMenuGroup" />
+        <Strings>
+          <ButtonText>Create Call Graph</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+  </Commands>
+  <CommandPlacements>
+    <CommandPlacement guid="guidCallGraphCommandPackageCmdSet" id="CallGraphCommandId" priority="0x0100">
+      <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
+    </CommandPlacement>
+  </CommandPlacements>
+  <Symbols>
+    <GuidSymbol name="guidCallGraphCommandPackageCmdSet" value="{b2c3d4e5-f678-9012-cdef-1234567890ab}">
+      <IDSymbol name="MyMenuGroup" value="0x1020" />
+      <IDSymbol name="CallGraphCommandId" value="0x0100" />
+    </GuidSymbol>
+    <GuidSymbol name="CallGraphExtensionPackage" value="{a1b2c3d4-e5f6-7890-abcd-ef1234567890}" />
+  </Symbols>
+</CommandTable>
